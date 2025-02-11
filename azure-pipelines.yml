@@ -18,7 +18,7 @@ steps:
     password: 'GpcMhAN0FC2ToPS2dAsfsaDQDEsMkjqwFDMp6Hsct0bR5n8r99ffudFY8sjf'
     rootDirectory: 'wp-content'
     filePatterns: 'index.php'
-    remoteDirectory: '/site/wwwroot/wp-content/'
+    remoteDirectory: '/site/wwwroot/wp-content/themes/twentytwentyfour/patterns/'
     clean: false
     cleanContents: false
     preservePaths: true
