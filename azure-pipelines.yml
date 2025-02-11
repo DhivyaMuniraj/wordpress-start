@@ -7,7 +7,7 @@ pool:
 steps:
 - task: AzurePowerShell@5
   inputs:
-    azureSubscription: 'MyAzureServiceConnection'  # Ensure correct service connection name
+    azureSubscription: 'Free Trial (bd42f546-3318-4407-9700-380997ca0dee)'  # Ensure correct service connection name
     ScriptType: 'InlineScript'
     Inline: |
       Write-Output "Connecting to Azure App Service..."
@@ -15,7 +15,6 @@ steps:
       $resourceGroup = "wordpresstest"
       Restart-AzWebApp -ResourceGroupName $resourceGroup -Name $appName
     azurePowerShellVersion: 'LatestVersion'
-
 - script: |
     curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
     chmod +x wp-cli.phar
@@ -23,7 +22,6 @@ steps:
     wp --info
     wp cli version
   displayName: 'Install WP-CLI'
-
 - script: |
     mkdir -p ~/wordpress-content
     cd ~/wordpress-content
