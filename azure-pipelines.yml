@@ -23,8 +23,8 @@ steps:
     wp cli version
   displayName: 'Install WP-CLI'
 - script: |
-    mkdir -p ~/wordpress-content
-    cd ~/wordpress-content
-    echo "Sample WordPress post content" > content.txt
-    wp post create ./content.txt --post_title='Sample Post Created with WP-CLI' --post_status=publish --allow-root
+    cd /var/www/wordpress
+    touch content.txt
+    nano content.txt
+    wp post create ./content.txt --post_title='Sample Post Created with WP-CLI' --post_status=publish
   displayName: 'Create WordPress Post'
