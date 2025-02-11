@@ -10,10 +10,32 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
+- task: FtpUpload@2
+  inputs:
+    credentialsOption: 'inputs'
+    serverUrl: 'ftps://waws-prod-ch1-059.ftp.azurewebsites.windows.net/site/wwwroot'
+    username: 'wordpresstest\$wordpresstest'
+    password: 'GpcMhAN0FC2ToPS2dAsfsaDQDEsMkjqwFDMp6Hsct0bR5n8r99ffudFY8sjf'
+    rootDirectory: 'wp-content'
+    filePatterns: '**'
+    remoteDirectory: '/site/wwwroot/wp-content'
+    clean: false
+    cleanContents: false
+    preservePaths: true
+    trustSSL: false
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+    php wp-cli.phar --info
+    chmod +x wp-cli.phar
+    sudo mv wp-cli.phar /usr/local/bin/wp
+    wp cli version
+- script: |
+    cd /var/www/wordpress
+    wp post list
+    touch content.txt
+    nano content.txt
+    wp post create ./content.txt --post_title='Sample Post Created with WP-CLI' --post_status=publish
+
+
+
+
