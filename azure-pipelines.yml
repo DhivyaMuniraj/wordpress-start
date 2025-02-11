@@ -1,8 +1,3 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - main
 
@@ -10,32 +5,28 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- task: FtpUpload@2
+- task: AzurePowerShell@5
   inputs:
-    credentialsOption: 'inputs'
-    serverUrl: 'ftps://waws-prod-ch1-059.ftp.azurewebsites.windows.net/site/wwwroot'
-    username: 'wordpresstest\$wordpresstest'
-    password: 'GpcMhAN0FC2ToPS2dAsfsaDQDEsMkjqwFDMp6Hsct0bR5n8r99ffudFY8sjf'
-    rootDirectory: 'wp-content'
-    filePatterns: '**'
-    remoteDirectory: '/site/wwwroot/wp-content'
-    clean: false
-    cleanContents: false
-    preservePaths: true
-    trustSSL: false
+    azureSubscription: 'MyAzureServiceConnection'  # Ensure correct service connection name
+    ScriptType: 'InlineScript'
+    Inline: |
+      Write-Output "Connecting to Azure App Service..."
+      $appName = "wordpresstest"
+      $resourceGroup = "wordpresstest"
+      Restart-AzWebApp -ResourceGroupName $resourceGroup -Name $appName
+    azurePowerShellVersion: 'LatestVersion'
+
 - script: |
     curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-    php wp-cli.phar --info
     chmod +x wp-cli.phar
     sudo mv wp-cli.phar /usr/local/bin/wp
+    wp --info
     wp cli version
+  displayName: 'Install WP-CLI'
+
 - script: |
-    cd /var/www/wordpress
-    wp post list
-    touch content.txt
-    nano content.txt
-    wp post create ./content.txt --post_title='Sample Post Created with WP-CLI' --post_status=publish
-
-
-
-
+    mkdir -p ~/wordpress-content
+    cd ~/wordpress-content
+    echo "Sample WordPress post content" > content.txt
+    wp post create ./content.txt --post_title='Sample Post Created with WP-CLI' --post_status=publish --allow-root
+  displayName: 'Create WordPress Post'
