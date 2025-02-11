@@ -21,5 +21,5 @@ steps:
     chmod +x wp-cli.phar
     sudo mv wp-cli.phar /usr/local/bin/wp
     wp cli version
-    wp plugin list --path=/home/site/wwwroot --allow-root
+    wp plugin list --path=`path/to/wordpress`
   displayName: 'Install WP-CLI'
